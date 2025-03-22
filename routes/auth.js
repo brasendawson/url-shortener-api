@@ -2,6 +2,8 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { addToBlacklist } from '../utils/tokenBlacklist.js';
+import { auth } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -50,6 +52,17 @@ router.post('/login', async (req, res) => {
     console.error(err);
     res.status(500).json('Server Error');
   }
+});
+
+// Logout
+router.post('/logout', auth, async (req, res) => {
+    try {
+        addToBlacklist(req.token);
+        res.json({ message: 'Logged out successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json('Server Error');
+    }
 });
 
 export default router;

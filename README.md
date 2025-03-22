@@ -122,6 +122,21 @@ Content-Type: application/json
 }
 ```
 
+### Logout User
+```http
+POST /api/auth/logout
+Authorization: Bearer your_jwt_token
+```
+
+Response:
+```json
+{
+    "message": "Logged out successfully"
+}
+```
+
+**Note**: After logout, the token will be invalidated and can't be used for future requests.
+
 ### Get User's URLs
 ```http
 GET /api/url/my-urls
