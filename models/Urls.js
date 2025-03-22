@@ -30,12 +30,12 @@ const Url = sequelize.define('Url', {
     allowNull: false,
     defaultValue: 0
   },
-  userId: {
-    type: DataTypes.INTEGER,
+  username: {
+    type: DataTypes.STRING,
     allowNull: false,
     references: {
       model: User,
-      key: 'id'
+      key: 'username'
     }
   }
 }, {
@@ -46,7 +46,7 @@ const Url = sequelize.define('Url', {
 });
 
 // Define the association
-Url.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Url, { foreignKey: 'userId' });
+Url.belongsTo(User, { foreignKey: 'username', targetKey: 'username' });
+User.hasMany(Url, { foreignKey: 'username', sourceKey: 'username' });
 
 export default Url;
