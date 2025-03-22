@@ -68,11 +68,36 @@ Response:
 }
 ```
 
+### Create Short URL with Custom Slug
+```http
+POST /api/url/shorten
+Content-Type: application/json
+
+{
+    "origUrl": "https://example.com",
+    "customSlug": "my-custom-url"  // Optional
+}
+```
+
 ### Access Short URL
 ```http
 GET /:urlId
 ```
 Response: `302 Found` - Redirects to original URL
+
+### Get URL Statistics
+```http
+GET /api/url/stats/:urlId
+```
+Response:
+```json
+{
+    "urlId": "abc123",
+    "clicks": 42,
+    "created_at": "2024-03-22T...",
+    "qrCode": "data:image/png;base64,..."
+}
+```
 
 ### Health Check
 ```http

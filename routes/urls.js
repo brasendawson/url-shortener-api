@@ -1,33 +1,63 @@
 import express from 'express';
 import { nanoid } from 'nanoid';
+import QRCode from 'qrcode';
 import Url from '../models/Urls.js';
 import { validateUrl } from '../utils/utils.js';
 
 const router = express.Router();
 
 router.post('/shorten', async (req, res) => {
-  const { origUrl } = req.body;
+  const { origUrl, customSlug } = req.body;
   const base = process.env.BASE;
 
-  // Validate URL
   if (!validateUrl(origUrl)) {
     return res.status(400).json('Invalid URL');
   }
 
   try {
-    // Create URL ID
-    const urlId = nanoid(8);
+    // Use custom slug or generate urlId
+    const urlId = customSlug || nanoid(8);
     const shortUrl = `${base}/${urlId}`;
 
-    // Save URL to database
+    // Generate QR code
+    const qrCode = await QRCode.toDataURL(shortUrl);
+
+    // Save URL
     const url = await Url.create({
       urlId,
       origUrl,
       shortUrl,
+      customSlug,
+      qrCode,
       date: new Date()
     });
 
     res.json(url);
+  } catch (err) {
+    if (err.name === 'SequelizeUniqueConstraintError') {
+      return res.status(400).json('Custom slug already taken');
+    }
+    console.error(err);
+    res.status(500).json('Server Error');
+  }
+});
+
+// Get URL statistics
+router.get('/stats/:urlId', async (req, res) => {
+  try {
+    const url = await Url.findOne({
+      where: { urlId: req.params.urlId }
+    });
+
+    if (url) {
+      return res.json({
+        urlId: url.urlId,
+        clicks: url.clicks,
+        created_at: url.created_at,
+        qrCode: url.qrCode
+      });
+    }
+    res.status(404).json('URL not found');
   } catch (err) {
     console.error(err);
     res.status(500).json('Server Error');

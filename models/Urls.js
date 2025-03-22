@@ -4,15 +4,25 @@ import { sequelize } from '../config/db.js';
 const Url = sequelize.define('Url', {
   urlId: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   origUrl: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   shortUrl: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  customSlug: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: true
+  },
+  qrCode: {
+    type: DataTypes.TEXT('long'), 
+    allowNull: true
   },
   clicks: {
     type: DataTypes.INTEGER,
