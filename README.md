@@ -20,7 +20,7 @@ A simple URL shortening service built with Node.js, Express, and MySQL.
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/urlshortener.git
+git clone https://github.com/brasendawson/urlshortener.git
 cd urlshortener
 ```
 
