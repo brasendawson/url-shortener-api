@@ -313,13 +313,42 @@ CREATE TABLE urls (
 
 ## Error Codes
 
-| Status | Description |
-|--------|------------|
-| 200    | Success    |
-| 302    | URL Redirect |
-| 400    | Bad Request |
-| 404    | URL Not Found |
-| 500    | Server Error |
+### Authentication Errors (400-403)
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | "Invalid credentials" | Wrong username or password |
+| 401 | "Please authenticate" | No token or invalid token provided |
+| 401 | "Token has been invalidated" | Token is blacklisted (after logout) |
+| 403 | "Access denied" | Valid token but insufficient permissions |
+
+### URL Related Errors (400-404)
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | "Invalid URL" | URL format is not valid |
+| 400 | "Custom slug already taken" | Requested custom slug is in use |
+| 404 | "URL not found" | Short URL does not exist |
+| 404 | "Not found" | Resource not found |
+
+### Server Errors (500)
+| Code | Message | Description |
+|------|---------|-------------|
+| 500 | "Server Error" | Generic server error |
+| 503 | "Service Unavailable" | Database connection failed |
+
+### Success Responses (200-302)
+| Code | Message | Description |
+|------|---------|-------------|
+| 200 | "OK" | Request succeeded |
+| 201 | "Created" | Resource created successfully |
+| 302 | "Found" | URL redirect |
+
+### Example Error Response
+```json
+{
+    "message": "Invalid URL",
+    "status": 400
+}
+```
 
 ## Contributing
 1. Fork repository
