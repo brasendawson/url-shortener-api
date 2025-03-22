@@ -4,6 +4,9 @@ import { connectDB } from './config/db.js';
 import urlRoutes from './routes/index.js';
 import urlShortener from './routes/urls.js';
 import healthRoutes from './routes/health.js';
+import authRoutes from './routes/auth.js';
+import './models/User.js';
+import './models/Urls.js';
 
 dotenv.config({ path: './config/.env' });
 
@@ -16,6 +19,7 @@ connectDB();
 // Routes
 app.use('/', urlRoutes);
 app.use('/api/url', urlShortener);
+app.use('/api/auth', authRoutes);
 app.use('/api', healthRoutes);
 
 app.get('/api/health', (req, res) => {

@@ -3,10 +3,12 @@ import { nanoid } from 'nanoid';
 import QRCode from 'qrcode';
 import Url from '../models/Urls.js';
 import { validateUrl } from '../utils/utils.js';
+import { auth } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/shorten', async (req, res) => {
+// Create short URL (protected route)
+router.post('/shorten', auth, async (req, res) => {
   const { origUrl, customSlug } = req.body;
   const base = process.env.BASE;
 
@@ -29,6 +31,7 @@ router.post('/shorten', async (req, res) => {
       shortUrl,
       customSlug,
       qrCode,
+      userId: req.user.userId,
       date: new Date()
     });
 
@@ -37,6 +40,20 @@ router.post('/shorten', async (req, res) => {
     if (err.name === 'SequelizeUniqueConstraintError') {
       return res.status(400).json('Custom slug already taken');
     }
+    console.error(err);
+    res.status(500).json('Server Error');
+  }
+});
+
+// Get user's URLs
+router.get('/my-urls', auth, async (req, res) => {
+  try {
+    const urls = await Url.findAll({
+      where: { userId: req.user.userId },
+      attributes: ['urlId', 'origUrl', 'shortUrl', 'clicks', 'created_at']
+    });
+    res.json(urls);
+  } catch (err) {
     console.error(err);
     res.status(500).json('Server Error');
   }

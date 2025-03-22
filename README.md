@@ -99,6 +99,35 @@ Response:
 }
 ```
 
+### Register User
+```http
+POST /api/auth/register
+Content-Type: application/json
+
+{
+    "username": "john_doe",
+    "email": "john@example.com",
+    "password": "secretpass123"
+}
+```
+
+### Login User
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+    "username": "john_doe",
+    "password": "secretpass123"
+}
+```
+
+### Get User's URLs
+```http
+GET /api/url/my-urls
+Authorization: Bearer your_jwt_token
+```
+
 ### Health Check
 ```http
 GET /api/health
@@ -111,6 +140,77 @@ Response:
     "service": "URL Shortener API",
     "database": "Connected",
     "uptime": 123.45
+}
+```
+
+## Authentication
+
+### Register New User
+```http
+POST /api/auth/register
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "email": "test@example.com",
+    "password": "password123"
+}
+```
+
+Response:
+```json
+{
+    "message": "User created successfully"
+}
+```
+
+### Login User
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "password123"
+}
+```
+
+Response:
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5..."
+}
+```
+
+### Using Authentication
+
+All protected routes require a JWT token in the Authorization header:
+
+```http
+Authorization: Bearer your_jwt_token
+```
+
+#### Protected Routes
+- `POST /api/url/shorten` - Create short URL
+- `GET /api/url/my-urls` - Get user's URLs
+- `GET /api/url/stats/:urlId` - Get URL statistics
+
+### Testing with Postman
+
+1. Register a new user using the `/api/auth/register` endpoint
+2. Login with the user credentials at `/api/auth/login`
+3. Copy the received token
+4. For protected routes:
+   - Go to the "Headers" tab
+   - Add header: `Authorization: Bearer your_jwt_token`
+   - Replace `your_jwt_token` with the actual token
+
+### Error Responses
+
+Authentication errors return 401 status code:
+```json
+{
+    "message": "Please authenticate"
 }
 ```
 

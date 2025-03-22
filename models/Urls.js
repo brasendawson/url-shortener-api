@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/db.js';
+import User from './User.js';
 
 const Url = sequelize.define('Url', {
   urlId: {
@@ -28,6 +29,14 @@ const Url = sequelize.define('Url', {
     type: DataTypes.INTEGER,
     allowNull: false,
     defaultValue: 0
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: User,
+      key: 'id'
+    }
   }
 }, {
   timestamps: true,
@@ -35,5 +44,9 @@ const Url = sequelize.define('Url', {
   updatedAt: false,
   tableName: 'urls'
 });
+
+// Define the association
+Url.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Url, { foreignKey: 'userId' });
 
 export default Url;
