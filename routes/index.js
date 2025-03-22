@@ -10,7 +10,7 @@ router.get('/:urlId', async (req, res) => {
 
     if (url) {
       await url.increment('clicks');
-      return res.redirect(url.origUrl);
+      return res.status(302).redirect(url.origUrl);
     } else {
       res.status(404).json('Not found');
     }

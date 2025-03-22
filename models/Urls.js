@@ -22,6 +22,7 @@ const Url = sequelize.define('Url', {
 }, {
   timestamps: true,
   createdAt: 'created_at',
+  updatedAt: false,
   tableName: 'urls'
 });
 
