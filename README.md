@@ -8,6 +8,7 @@ A simple URL shortening service built with Node.js, Express, and MySQL.
 - RESTful API endpoints
 - MySQL database persistence
 - Health monitoring
+- QR code generation for shortened URLs
 
 ## Tech Stack
 - Node.js (v18+)
@@ -27,6 +28,7 @@ cd urlshortener
 2. Install dependencies:
 ```bash
 npm install
+npm install qrcode
 ```
 
 3. Create `.env` file in `config` directory:
@@ -76,6 +78,29 @@ Content-Type: application/json
 {
     "origUrl": "https://example.com",
     "customSlug": "my-custom-url"  // Optional
+}
+```
+
+### Create Short URL with QR Code
+```http
+POST /api/url/shorten
+Content-Type: application/json
+
+{
+    "origUrl": "https://example.com",
+    "customSlug": "my-custom-url",  // Optional
+}
+```
+
+Response:
+```json
+{
+    "urlId": "abc123",
+    "origUrl": "https://example.com",
+    "shortUrl": "http://localhost:3333/abc123",
+    "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA...",
+    "clicks": 0,
+    "created_at": "2024-03-22T..."
 }
 ```
 
