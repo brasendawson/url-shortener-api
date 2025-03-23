@@ -164,7 +164,7 @@ router.get('/my-urls', auth, async (req, res) => {
   try {
     const urls = await Url.findAll({
       where: { username: req.user.username },  // Changed from userId to username
-      attributes: ['urlId', 'origUrl', 'shortUrl', 'clicks', 'created_at']
+      attributes: ['origUrl', 'shortUrl', 'clicks', 'qrCode']
     });
     res.json(urls);
   } catch (err) {
@@ -216,9 +216,12 @@ router.get('/stats/:urlId', auth, async (req, res) => {
     if (url) {
       return res.json({
         urlId: url.urlId,
+        origUrl: url.origUrl,
+        shortUrl: url.shortUrl,
         clicks: url.clicks,
         created_at: url.created_at,
         qrCode: url.qrCode
+
       });
     }
     res.status(404).json('URL not found');
