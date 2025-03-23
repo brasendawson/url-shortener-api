@@ -280,17 +280,38 @@ npm start
 
 ## Database Schema
 
+### Users Table
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
 ### URLs Table
 ```sql
 CREATE TABLE urls (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    urlId VARCHAR(255) NOT NULL,
+    urlId VARCHAR(255) NOT NULL UNIQUE,
     origUrl TEXT NOT NULL,
     shortUrl VARCHAR(255) NOT NULL,
+    customSlug VARCHAR(255) UNIQUE,
+    qrCode LONGTEXT,
     clicks INT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    username VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (username) REFERENCES users(username)
 );
 ```
+
+### Table Relationships
+- One-to-Many: A user can have multiple shortened URLs
+- Foreign Key: `urls.username` references `users.username`
+- Both tables include creation timestamps
+- All URLs must be associated with a user
 
 ## Environment Variables
 
