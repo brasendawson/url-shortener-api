@@ -252,4 +252,54 @@ router.get('/stats/:urlId', auth, async (req, res) => {
  *         description: URL not found
  */
 
+router.get('/:urlId', async (req, res) => {
+  const urlId = req.params.urlId;
+  
+  try {
+    const url = await Url.findOne({ 
+      where: { urlId },
+      attributes: ['origUrl', 'clicks']
+    });
+    
+    if (!url) {
+      // Log not found error before sending response
+      await logger.error('URL redirect failed - Not Found', {
+        urlId,
+        event: 'url_redirect_failed',
+        reason: 'not_found',
+        requestPath: req.originalUrl,
+        ip: req.ip,
+        userAgent: req.headers['user-agent'],
+        method: req.method,
+        timestamp: new Date().toISOString()
+      });
+
+      return res.status(404).json({
+        status: 'error',
+        message: 'Short URL not found'
+      });
+    }
+
+    // Update click count and redirect
+    await url.increment('clicks');
+    return res.redirect(url.origUrl);
+
+  } catch (error) {
+    // Log any other errors
+    await logger.error('URL redirect failed - Server Error', {
+      urlId,
+      event: 'url_redirect_failed',
+      error: error.message,
+      stack: error.stack,
+      requestPath: req.originalUrl,
+      timestamp: new Date().toISOString()
+    });
+
+    return res.status(500).json({
+      status: 'error',
+      message: 'Server error during redirect'
+    });
+  }
+});
+
 export default router;

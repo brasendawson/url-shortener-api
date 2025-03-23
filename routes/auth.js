@@ -6,6 +6,7 @@ import { addToBlacklist } from '../utils/tokenBlacklist.js';
 import { auth } from '../middleware/auth.js';
 import { validateRegistration } from '../middleware/validateInput.js';
 import logger from '../utils/logger.js';
+import { Op } from 'sequelize';
 
 const router = express.Router();
 
@@ -103,6 +104,24 @@ const router = express.Router();
 router.post('/register', validateRegistration, async (req, res) => {
   try {
     const { username, email, password } = req.body;
+
+    // Check if user exists
+    const existingUser = await User.findOne({ where: { 
+        [Op.or]: [{ username }, { email }] 
+    }});
+
+    if (existingUser) {
+        logger.error('Registration failed - User exists', {
+            username,
+            email,
+            event: 'registration_duplicate',
+            duplicateField: existingUser.username === username ? 'username' : 'email'
+        });
+        return res.status(400).json({ 
+            message: 'Username or email already exists'
+        });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     
     const user = await User.create({
@@ -113,12 +132,11 @@ router.post('/register', validateRegistration, async (req, res) => {
 
     res.status(201).json({ message: 'User created successfully' });
   } catch (err) {
-    if (err.name === 'SequelizeUniqueConstraintError') {
-      return res.status(400).json({ 
-        message: 'Username or email already exists' 
-      });
-    }
-    console.error(err);
+    logger.error('Registration failed', {
+        username: req.body.username,
+        error: err.message,
+        event: 'registration_failed'
+    });
     res.status(500).json({ message: 'Server Error' });
   }
 });
