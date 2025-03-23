@@ -5,6 +5,7 @@ import User from '../models/User.js';
 import { addToBlacklist } from '../utils/tokenBlacklist.js';
 import { auth } from '../middleware/auth.js';
 import { validateRegistration } from '../middleware/validateInput.js';
+import logger from '../utils/logger.js';
 
 const router = express.Router();
 
@@ -129,11 +130,21 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
+      logger.error('Authentication failed', {
+        username,
+        reason: 'Invalid credentials',
+        event: 'auth_failure'
+      });
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
+      logger.error('Authentication failed', {
+        username,
+        reason: 'Invalid credentials',
+        event: 'auth_failure'
+      });
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
@@ -143,9 +154,10 @@ router.post('/login', async (req, res) => {
       { expiresIn: '24h' }
     );
 
+    logger.info(`User logged in: ${username}`);
     res.json({ token });
   } catch (err) {
-    console.error(err);
+    logger.error('Login error:', { error: err.message });
     res.status(500).json('Server Error');
   }
 });
@@ -158,6 +170,23 @@ router.post('/logout', auth, async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json('Server Error');
+    }
+});
+
+// Test logging route
+router.get('/test-log', (req, res) => {
+    logger.info('Test log entry');
+    logger.error('Test error entry');
+    res.json({ message: 'Logging test complete' });
+});
+
+// Add this route to test error logging
+router.get('/test-error', (req, res) => {
+    try {
+        throw new Error('Test error from API');
+    } catch (error) {
+        logger.error('API Error:', error);
+        res.status(500).json({ message: 'Error logged' });
     }
 });
 

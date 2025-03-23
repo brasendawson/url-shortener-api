@@ -1,4 +1,4 @@
-name: CI/CD
+name: URL Shortener CI/CD
 
 on:
   push:
@@ -7,14 +7,35 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: urlshortener_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
     - uses: actions/checkout@v2
+    
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '18.x'
-    - run: npm ci
-    - run: npm test
-    - run: npm run build --if-present
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run tests
+      run: npm test
+      env:
+        DB_NAME: urlshortener_test
+        DB_USER: root
+        DB_PASSWORD: root
+        DB_HOST: localhost
+        JWT_SECRET: test_secret

@@ -25,6 +25,11 @@ export const connectDB = async () => {
     console.log('MySQL database connected successfully');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
+    logger.error('Database connection failed', {
+      error: err.message,
+      code: err.code,
+      event: 'db_connection_failed'
+    });
     process.exit(1);
   }
 };

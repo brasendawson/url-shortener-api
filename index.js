@@ -9,6 +9,7 @@ import './models/User.js';
 import './models/Urls.js';
 import swaggerUi from 'swagger-ui-express';
 import { specs } from './config/swagger.js';
+import { limiter } from './middleware/rateLimit.js';
 
 dotenv.config({ path: './config/.env' });
 
@@ -17,6 +18,9 @@ app.use(express.json());
 
 // Connect to database
 connectDB();
+
+// Rate Limiting
+app.use(limiter);
 
 // API Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));

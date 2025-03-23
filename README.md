@@ -427,3 +427,93 @@ ISC License
 
 ## Author
 Brasen Ethan Kwame Dawson
+
+## Rate Limiting
+
+The API implements rate limiting to prevent abuse:
+- 100 requests per 15 minutes window per IP
+- Applies to all API endpoints
+- Returns 429 status code when limit is exceeded
+
+Example rate limit error response:
+```json
+{
+    "status": "error",
+    "message": "Too many requests. Try again in 15 minutes",
+    "retryAfter": 900
+}
+```
+
+### Rate Limit Headers
+The API also includes standard rate limit headers:
+```http
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1616501234
+Retry-After: 900
+```
+
+### Understanding Rate Limit Values
+- `retryAfter`: Seconds until the rate limit window resets
+- `X-RateLimit-Limit`: Maximum requests allowed in the window
+- `X-RateLimit-Remaining`: Number of requests remaining
+- `X-RateLimit-Reset`: Unix timestamp when the limit resets
+
+## Logging
+
+The application uses Winston for logging. Logs are stored in the `logs` directory:
+- `error.log`: Contains error-level logs
+- `combined.log`: Contains all logs (info, warn, error)
+
+### Log Types
+1. **Error Logs**
+   - Rate limit violations
+   - Authentication failures
+   - Database errors
+   - API errors
+
+2. **Info Logs**
+   - URL creations
+   - Successful authentications
+   - Database connections
+
+### Log Format
+```json
+{
+  "timestamp": "2025-03-23T11:10:20.183Z",
+  "level": "error",
+  "message": "Rate limit exceeded",
+  "ip": "::1",
+  "endpoint": "/api/health",
+  "event": "rate_limit_exceeded",
+  "remainingTime": 15
+}
+```
+
+### Viewing Logs
+```powershell
+# View error logs
+Get-Content -Path ".\logs\error.log" -Wait
+
+# View all logs
+Get-Content -Path ".\logs\combined.log" -Wait
+```
+
+## Error Handling
+
+The API returns standardized error responses:
+
+```json
+{
+    "status": "error",
+    "message": "Error description",
+    "code": "ERROR_CODE"
+}
+```
+
+Common HTTP Status Codes:
+- 400: Bad Request
+- 401: Unauthorized
+- 403: Forbidden
+- 429: Too Many Requests
+- 500: Internal Server Error

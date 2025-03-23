@@ -91,11 +91,28 @@ router.post('/shorten', auth, async (req, res) => {
       date: new Date()
     });
 
+    logger.urlCreated(url.urlId, req.user.username);
     res.json(url);
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
+      logger.error('Duplicate custom slug', {
+        customSlug,
+        username: req.user.username,
+        event: 'duplicate_slug'
+      });
       return res.status(400).json('Custom slug already taken');
     }
+    logger.error('URL creation failed', {
+      origUrl,
+      username: req.user.username,
+      error: err.message,
+      event: 'url_creation_failed'
+    });
+    logger.error('Error shortening URL', { 
+      error: err.message,
+      username: req.user.username,
+      origUrl: req.body.origUrl
+    });
     console.error(err);
     res.status(500).json('Server Error');
   }
