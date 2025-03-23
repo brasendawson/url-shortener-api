@@ -180,7 +180,10 @@ All protected routes require a JWT token in the Authorization header:
 ```http
 Authorization: Bearer your_jwt_token
 ```
-
+#### Protected Routes
+- `POST /api/url/shorten` - Create short URL
+- `GET /api/url/my-urls` - Get user's URLs
+- `GET /api/url/stats/:urlId` - Get URL statistics
 
 
 ## Health Check
@@ -197,11 +200,6 @@ Response:
     "uptime": 123.45
 }
 ```
-
-#### Protected Routes
-- `POST /api/url/shorten` - Create short URL
-- `GET /api/url/my-urls` - Get user's URLs
-- `GET /api/url/stats/:urlId` - Get URL statistics
 
 ### Testing with Postman
 
