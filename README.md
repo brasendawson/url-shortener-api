@@ -51,39 +51,7 @@ CREATE DATABASE urlshortener;
 
 ## API Reference
 
-### Create Short URL
-```http
-POST /api/url/shorten
-Content-Type: application/json
-
-{
-    "origUrl": "https://example.com"
-}
-```
-
-Response:
-```json
-{
-    "urlId": "abc123",
-    "origUrl": "https://example.com",
-    "shortUrl": "http://localhost:3333/abc123",
-    "clicks": 0,
-    "created_at": "2024-03-22T..."
-}
-```
-
-### Create Short URL with Custom Slug
-```http
-POST /api/url/shorten
-Content-Type: application/json
-
-{
-    "origUrl": "https://example.com",
-    "customSlug": "my-custom-url"  // Optional
-}
-```
-
-### Create Short URL with a QR Code
+### Create Short URL with a QR Code and Custom Slug
 ```http
 POST /api/url/shorten
 Content-Type: application/json
