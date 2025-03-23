@@ -4,11 +4,13 @@ A simple URL shortening service built with Node.js, Express, and MySQL.
 
 ## Features
 - Shorten long URLs
-- Track click metrics
-- RESTful API endpoints
+- Custom URL slugs
+- QR code generation
+- Click tracking
+- User-specific URL management
+- JWT authentication
 - MySQL database persistence
 - Health monitoring
-- QR code generation for shortened URLs
 
 ## Tech Stack
 - Node.js (v18+)
@@ -81,7 +83,7 @@ Content-Type: application/json
 }
 ```
 
-### Create Short URL with QR Code
+### Create Short URL with a QR Code
 ```http
 POST /api/url/shorten
 Content-Type: application/json
@@ -95,14 +97,30 @@ Content-Type: application/json
 Response:
 ```json
 {
+    "clicks": 0,
+    "id": 1,
     "urlId": "abc123",
     "origUrl": "https://example.com",
     "shortUrl": "http://localhost:3333/abc123",
-    "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA...",
-    "clicks": 0,
-    "created_at": "2024-03-22T..."
+    "customSlug": "your-custom-slug",
+    "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+    "username": "your_username",
+    "created_at": "2025-03-23T08:01:15.565Z"
 }
 ```
+
+### Response Field Descriptions
+| Field | Type | Description |
+|-------|------|-------------|
+| clicks | number | Number of times URL has been accessed |
+| id | number | Internal database ID |
+| urlId | string | Unique identifier for short URL |
+| origUrl | string | Original long URL |
+| shortUrl | string | Generated short URL |
+| customSlug | string | Custom URL slug (if provided) |
+| qrCode | string | Base64 encoded QR code image |
+| username | string | Owner of the shortened URL |
+| created_at | string | Timestamp of creation |
 
 ### Access Short URL
 ```http
