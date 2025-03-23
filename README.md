@@ -116,9 +116,9 @@ POST /api/auth/register
 Content-Type: application/json
 
 {
-    "username": "john_doe",
-    "email": "john@example.com",
-    "password": "secretpass123"
+    "username": "testuser",
+    "email": "testuser@example.com",
+    "password": "password123"
 }
 ```
 
@@ -128,8 +128,15 @@ POST /api/auth/login
 Content-Type: application/json
 
 {
-    "username": "john_doe",
-    "password": "secretpass123"
+    "username": "testuser",
+    "password": "password123"
+}
+```
+
+Response:
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6....",
 }
 ```
 
