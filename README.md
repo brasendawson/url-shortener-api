@@ -100,6 +100,20 @@ Response: `302 Found` - Redirects to original URL
 ```http
 GET /api/url/stats/:urlId
 ```
+Response:
+```json
+{
+    "urlId": "abc123",
+    "clicks": 42,
+    "created_at": "2024-03-22T...",
+    "qrCode": "data:image/png;base64,..."
+}
+```
+## Get User's URLs
+```http
+GET /api/url/my-urls
+Authorization: Bearer your_jwt_token
+```
 Response: Lists all the URLs Shortened by a User
 ```json
 [
@@ -118,18 +132,6 @@ Response: Lists all the URLs Shortened by a User
         "created_at": "2025-03-23T08:01:15.000Z"
     }
 ]
-```
-
-## Get User's URLs
-```http
-GET /api/url/my-urls
-Authorization: Bearer your_jwt_token
-```
-Response: Lists all the URLs Shortened by a User
-```json
-{
-
-}
 ```
 
 ## Api Authentication Reference
