@@ -7,6 +7,8 @@ import healthRoutes from './routes/health.js';
 import authRoutes from './routes/auth.js';
 import './models/User.js';
 import './models/Urls.js';
+import swaggerUi from 'swagger-ui-express';
+import { specs } from './config/swagger.js';
 
 dotenv.config({ path: './config/.env' });
 
@@ -16,15 +18,14 @@ app.use(express.json());
 // Connect to database
 connectDB();
 
+// API Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 // Routes
 app.use('/', urlRoutes);
 app.use('/api/url', urlShortener);
 app.use('/api/auth', authRoutes);
-app.use('/api', healthRoutes);
-
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK' });
-});
+app.use('/api/health', healthRoutes);
 
 const PORT = process.env.PORT || 3333;
 

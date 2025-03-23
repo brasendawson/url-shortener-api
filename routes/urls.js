@@ -7,7 +7,63 @@ import { auth } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Create short URL (protected route)
+/**
+ * @swagger
+ * tags:
+ *   name: URLs
+ *   description: URL shortening operations
+ */
+
+/**
+ * @swagger
+ * /api/url/shorten:
+ *   post:
+ *     summary: Create a shortened URL
+ *     tags: [URLs]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - origUrl
+ *             properties:
+ *               origUrl:
+ *                 type: string
+ *                 format: uri
+ *               customSlug:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: URL shortened successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 urlId:
+ *                   type: string
+ *                 origUrl:
+ *                   type: string
+ *                 shortUrl:
+ *                   type: string
+ *                 qrCode:
+ *                   type: string
+ *                 clicks:
+ *                   type: integer
+ *                 username:
+ *                   type: string
+ *                 created_at:
+ *                   type: string
+ *                   format: date-time
+ *       401:
+ *         description: Unauthorized
+ *       400:
+ *         description: Invalid URL
+ */
 router.post('/shorten', auth, async (req, res) => {
   const { origUrl, customSlug } = req.body;
   const base = process.env.BASE;
@@ -45,6 +101,37 @@ router.post('/shorten', auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/url/my-urls:
+ *   get:
+ *     summary: Get all URLs for logged in user
+ *     tags: [URLs]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of user's URLs
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   urlId:
+ *                     type: string
+ *                   origUrl:
+ *                     type: string
+ *                   shortUrl:
+ *                     type: string
+ *                   clicks:
+ *                     type: integer
+ *                   created_at:
+ *                     type: string
+ *                     format: date-time
+ */
+
 // Get user's URLs
 router.get('/my-urls', auth, async (req, res) => {
   try {
@@ -58,6 +145,39 @@ router.get('/my-urls', auth, async (req, res) => {
     res.status(500).json('Server Error');
   }
 });
+
+/**
+ * @swagger
+ * /api/url/stats/{urlId}:
+ *   get:
+ *     summary: Get URL statistics
+ *     tags: [URLs]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: urlId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: URL statistics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 urlId:
+ *                   type: string
+ *                 clicks:
+ *                   type: integer
+ *                 created_at:
+ *                   type: string
+ *                   format: date-time
+ *       404:
+ *         description: URL not found
+ */
 
 // Get URL statistics
 router.get('/stats/:urlId', async (req, res) => {
@@ -80,5 +200,24 @@ router.get('/stats/:urlId', async (req, res) => {
     res.status(500).json('Server Error');
   }
 });
+
+/**
+ * @swagger
+ * /{urlId}:
+ *   get:
+ *     summary: Redirect to original URL
+ *     tags: [URLs]
+ *     parameters:
+ *       - in: path
+ *         name: urlId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       302:
+ *         description: Redirect to original URL
+ *       404:
+ *         description: URL not found
+ */
 
 export default router;

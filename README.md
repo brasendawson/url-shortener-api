@@ -362,6 +362,59 @@ CREATE TABLE urls (
 }
 ```
 
+## API Documentation
+Swagger documentation available at: http://localhost:3333/api-docs
+
+## API Documentation
+
+The API documentation is available at: `http://localhost:3333/api-docs`
+
+To view the documentation:
+1. Start the server: `npm run dev`
+2. Open your browser
+3. Navigate to `http://localhost:3333/api-docs`
+
+The documentation includes:
+- All available endpoints
+- Request/response formats
+- Authentication requirements
+- Example requests
+- Response codes
+
+## Testing
+```bash
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+## Security Features
+- Rate limiting: 100 requests per 15 minutes
+- Password requirements: Min 8 chars, uppercase, lowercase, number, special char
+- CORS protection
+- Input validation
+- JWT token blacklisting
+- Request validation
+
+## CI/CD
+GitHub Actions workflow includes:
+- Automated testing
+- Code coverage reporting
+- Build verification
+- Deployment checks
+
+## Logging
+- Error logs: ./error.log
+- Combined logs: ./combined.log
+- Console logging in development
+
+## Backup Strategy
+1. Database backups run daily
+2. Logs rotated weekly
+3. Backup retention: 30 days
+
 ## Contributing
 1. Fork repository
 2. Create feature branch

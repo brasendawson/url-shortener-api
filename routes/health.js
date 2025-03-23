@@ -1,9 +1,39 @@
 import express from 'express';
 import { sequelize } from '../config/db.js';
 
+/**
+ * @swagger
+ * tags:
+ *   name: Health
+ *   description: API health check
+ */
+
+/**
+ * @swagger
+ * /api/health:
+ *   get:
+ *     summary: Check API health
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: API is healthy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 timestamp:
+ *                   type: string
+ *                 uptime:
+ *                   type: number
+ */
+
 const router = express.Router();
 
-router.get('/health', async (req, res) => {
+// Change from '/health' to '/'
+router.get('/', async (req, res) => {
   try {
     // Check database connection
     await sequelize.authenticate();
