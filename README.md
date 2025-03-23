@@ -102,19 +102,35 @@ GET /api/url/stats/:urlId
 ```
 Response:
 ```json
-{
-    "urlId": "abc123",
-    "clicks": 42,
-    "created_at": "2024-03-22T...",
-    "qrCode": "data:image/png;base64,..."
-}
+[
+    {
+        "urlId": "abc123",
+        "origUrl": "https://example.com/page1",
+        "shortUrl": "http://localhost:3333/abc123",
+        "clicks": 5,
+        "created_at": "2025-03-23T07:50:27.000Z"
+    },
+    {
+        "urlId": "def456",
+        "origUrl": "https://example.com/page2",
+        "shortUrl": "http://localhost:3333/def456",
+        "clicks": 0,
+        "created_at": "2025-03-23T08:01:15.000Z"
+    }
+]
 ```
+
 ## Get User's URLs
 ```http
 GET /api/url/my-urls
 Authorization: Bearer your_jwt_token
 ```
-Response: It lists all the URLs Shortened by a User
+Response: Lists all the URLs Shortened by a User
+```json
+{
+
+}
+```
 
 ## Api Authentication Reference
 
