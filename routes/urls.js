@@ -207,7 +207,7 @@ router.get('/my-urls', auth, async (req, res) => {
  */
 
 // Get URL statistics
-router.get('/stats/:urlId', async (req, res) => {
+router.get('/stats/:urlId', auth, async (req, res) => {
   try {
     const url = await Url.findOne({
       where: { urlId: req.params.urlId }
@@ -223,8 +223,13 @@ router.get('/stats/:urlId', async (req, res) => {
     }
     res.status(404).json('URL not found');
   } catch (err) {
-    console.error(err);
-    res.status(500).json('Server Error');
+    logger.error('Stats retrieval failed', {
+      urlId: req.params.urlId,
+      username: req.user.username,
+      error: err.message,
+      event: 'stats_failed'
+    });
+    res.status(500).json({ message: 'Server Error' });
   }
 });
 

@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/db.js';
 import User from './User.js';
+import logger from '../utils/logger.js';  // Fixed import path
 
 const Url = sequelize.define('Url', {
   urlId: {
@@ -42,7 +43,17 @@ const Url = sequelize.define('Url', {
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: false,
-  tableName: 'urls'
+  tableName: 'urls',
+  hooks: {
+    beforeValidate: (url, options) => {
+      if (!url.origUrl) {
+        logger.error('URL validation failed', {
+          error: 'Missing original URL',
+          event: 'model_validation_failed'
+        });
+      }
+    }
+  }
 });
 
 // Define the association

@@ -10,6 +10,8 @@ import './models/Urls.js';
 import swaggerUi from 'swagger-ui-express';
 import { specs } from './config/swagger.js';
 import { limiter } from './middleware/rateLimit.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import logger from './utils/logger.js';
 
 dotenv.config({ path: './config/.env' });
 
@@ -18,6 +20,13 @@ app.use(express.json());
 
 // Connect to database
 connectDB();
+
+// Log startup information
+logger.info('Application starting', {
+    event: 'app_start',
+    port: process.env.PORT || 3333,
+    environment: process.env.NODE_ENV || 'development'
+});
 
 // Rate Limiting
 app.use(limiter);
@@ -31,8 +40,35 @@ app.use('/api/url', urlShortener);
 app.use('/api/auth', authRoutes);
 app.use('/api/health', healthRoutes);
 
+// Error Handler
+app.use(errorHandler);
+
 const PORT = process.env.PORT || 3333;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+    logger.info('Server started', {
+        event: 'server_start',
+        port: PORT,
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+    logger.error('Uncaught Exception', {
+        error: err.message,
+        stack: err.stack,
+        event: 'uncaught_exception'
+    });
+    process.exit(1);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err) => {
+    logger.error('Unhandled Rejection', {
+        error: err.message,
+        stack: err.stack,
+        event: 'unhandled_rejection'
+    });
+    process.exit(1);
 });
