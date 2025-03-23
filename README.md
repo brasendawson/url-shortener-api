@@ -58,7 +58,7 @@ Content-Type: application/json
 
 {
     "origUrl": "https://example.com",
-    "customSlug": "my-custom-url",  // Optional
+    "customSlug": "my-custom-url"
 }
 ```
 

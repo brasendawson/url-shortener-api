@@ -1,4 +1,5 @@
 import { body, validationResult } from 'express-validator';
+import logger from '../utils/logger.js';
 
 export const validateRegistration = [
     body('username')
@@ -27,6 +28,17 @@ export const validateRegistration = [
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            // Log validation errors
+            logger.error('Validation failed', {
+                endpoint: req.originalUrl,
+                event: 'validation_error',
+                username: req.body.username,
+                errors: errors.array().map(err => ({
+                    field: err.path,
+                    message: err.msg
+                }))
+            });
+
             return res.status(400).json({
                 status: 'error',
                 errors: errors.array().map(err => ({

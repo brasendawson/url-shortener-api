@@ -4,6 +4,7 @@ import QRCode from 'qrcode';
 import Url from '../models/Urls.js';
 import { validateUrl } from '../utils/utils.js';
 import { auth } from '../middleware/auth.js';
+import logger from '../utils/logger.js';  // Add this import
 
 const router = express.Router();
 
@@ -69,6 +70,11 @@ router.post('/shorten', auth, async (req, res) => {
   const base = process.env.BASE;
 
   if (!validateUrl(origUrl)) {
+    logger.error('Invalid URL submitted', {
+      origUrl,
+      username: req.user.username,
+      event: 'validation_error'
+    });
     return res.status(400).json('Invalid URL');
   }
 
@@ -91,7 +97,11 @@ router.post('/shorten', auth, async (req, res) => {
       date: new Date()
     });
 
-    logger.urlCreated(url.urlId, req.user.username);
+    logger.info('URL created successfully', {
+      urlId,
+      username: req.user.username,
+      event: 'url_created'
+    });
     res.json(url);
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
