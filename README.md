@@ -51,7 +51,7 @@ CREATE DATABASE urlshortener;
 
 ## API Reference
 
-### Create Short URL with a QR Code and Custom Slug
+### Create Short URL with a QR Code and Optional Custom Slug
 ```http
 POST /api/url/shorten
 Content-Type: application/json
@@ -109,6 +109,11 @@ Response:
     "qrCode": "data:image/png;base64,..."
 }
 ```
+## Get User's URLs
+```http
+GET /api/url/my-urls
+Authorization: Bearer your_jwt_token
+```
 
 ## Api Authentication Reference
 
@@ -157,11 +162,7 @@ All protected routes require a JWT token in the Authorization header:
 Authorization: Bearer your_jwt_token
 ```
 
-## Get User's URLs
-```http
-GET /api/url/my-urls
-Authorization: Bearer your_jwt_token
-```
+
 
 ## Health Check
 ```http
