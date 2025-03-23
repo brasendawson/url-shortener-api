@@ -110,73 +110,7 @@ Response:
 }
 ```
 
-### Register User
-```http
-POST /api/auth/register
-Content-Type: application/json
-
-{
-    "username": "testuser",
-    "email": "testuser@example.com",
-    "password": "password123"
-}
-```
-
-### Login User
-```http
-POST /api/auth/login
-Content-Type: application/json
-
-{
-    "username": "testuser",
-    "password": "password123"
-}
-```
-
-Response:
-```json
-{
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6....",
-}
-```
-
-### Logout User
-```http
-POST /api/auth/logout
-Authorization: Bearer your_jwt_token
-```
-
-Response:
-```json
-{
-    "message": "Logged out successfully"
-}
-```
-
-**Note**: After logout, the token will be invalidated and can't be used for future requests.
-
-### Get User's URLs
-```http
-GET /api/url/my-urls
-Authorization: Bearer your_jwt_token
-```
-
-### Health Check
-```http
-GET /api/health
-```
-Response:
-```json
-{
-    "status": "UP",
-    "timestamp": "2024-03-22T...",
-    "service": "URL Shortener API",
-    "database": "Connected",
-    "uptime": 123.45
-}
-```
-
-## Authentication
+## Api Authentication Reference
 
 ### Register New User
 ```http
@@ -221,6 +155,27 @@ All protected routes require a JWT token in the Authorization header:
 
 ```http
 Authorization: Bearer your_jwt_token
+```
+
+## Get User's URLs
+```http
+GET /api/url/my-urls
+Authorization: Bearer your_jwt_token
+```
+
+## Health Check
+```http
+GET /api/health
+```
+Response:
+```json
+{
+    "status": "UP",
+    "timestamp": "2024-03-22T...",
+    "service": "URL Shortener API",
+    "database": "Connected",
+    "uptime": 123.45
+}
 ```
 
 #### Protected Routes
