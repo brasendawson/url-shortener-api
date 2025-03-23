@@ -31,7 +31,7 @@ router.post('/shorten', auth, async (req, res) => {
       shortUrl,
       customSlug,
       qrCode,
-      username: req.user.username,  // Changed from userId to username
+      username: req.user.username, 
       date: new Date()
     });
 
