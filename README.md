@@ -114,6 +114,7 @@ Response:
 GET /api/url/my-urls
 Authorization: Bearer your_jwt_token
 ```
+Response: It lists all the URLs Shortened by a User
 
 ## Api Authentication Reference
 
