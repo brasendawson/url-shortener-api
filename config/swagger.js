@@ -1,32 +1,43 @@
 import swaggerJsdoc from 'swagger-jsdoc';
 
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'URL Shortener API',
-      version: '1.0.0',
-      description: 'A URL shortening service',
-      contact: {
-        name: 'Brasen Ethan Kwame Dawson'
-      }
+const options = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'URL Shortener API',
+            version: '1.0.0',
+            description: 'API for shortening URLs with user management',
+            contact: {
+                name: 'API Support',
+                email: 'brasendawson@icloud.com'
+            },
+            license: {
+                name: 'MIT',
+                url: 'https://opensource.org/licenses/MIT'
+            }
+        },
+        servers: [
+            {
+                url: process.env.BASE || 'http://localhost:3333',
+                description: process.env.NODE_ENV === 'production' 
+                    ? 'Production server' 
+                    : 'Development server'
+            }
+        ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT'
+                }
+            }
+        },
+        security: [{
+            bearerAuth: []
+        }]
     },
-    servers: [
-      {
-        url: process.env.BASE || 'http://localhost:3333'
-      }
-    ],
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT'
-        }
-      }
-    }
-  },
-  apis: ['./routes/*.js']
+    apis: ['./routes/*.js']
 };
 
-export const specs = swaggerJsdoc(swaggerOptions);
+export const specs = swaggerJsdoc(options);
