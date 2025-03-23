@@ -415,19 +415,6 @@ GitHub Actions workflow includes:
 2. Logs rotated weekly
 3. Backup retention: 30 days
 
-## Contributing
-1. Fork repository
-2. Create feature branch
-3. Commit changes
-4. Push to branch
-5. Create Pull Request
-
-## License
-ISC License
-
-## Author
-Brasen Ethan Kwame Dawson
-
 ## Rate Limiting
 
 The API implements rate limiting to prevent abuse:
@@ -517,3 +504,16 @@ Common HTTP Status Codes:
 - 403: Forbidden
 - 429: Too Many Requests
 - 500: Internal Server Error
+
+## Contributing
+1. Fork repository
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Create Pull Request
+
+## License
+ISC License
+
+## Author
+Brasen Ethan Kwame Dawson
