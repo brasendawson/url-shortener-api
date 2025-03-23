@@ -100,7 +100,7 @@ Response: `302 Found` - Redirects to original URL
 ```http
 GET /api/url/stats/:urlId
 ```
-Response:
+Response: Lists all the URLs Shortened by a User
 ```json
 [
     {
