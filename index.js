@@ -12,11 +12,13 @@ import { specs } from './config/swagger.js';
 import { limiter } from './middleware/rateLimit.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import logger from './utils/logger.js';
-
+import cors from "cors"
 dotenv.config({ path: './config/.env' });
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use (cors())
 
 // Connect to database
 connectDB();

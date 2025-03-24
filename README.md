@@ -49,7 +49,20 @@ BASE=http://localhost:3333
 CREATE DATABASE urlshortener;
 ```
 
-## API Reference
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login user
+
+### URL Operations
+- `POST /api/url/shorten` - Create short URL
+- `GET /api/url/my-urls` - List user's URLs
+- `GET /api/url/stats/:urlId` - Get URL statistics
+- `GET /:urlId` - Redirect to original URL
+
+### Health Check
+- `GET /api/health` - API health status
 
 ### Create Short URL with a QR Code and Optional Custom Slug
 ```http
