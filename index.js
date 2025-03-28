@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
-import urlRoutes from './routes/index.js';
+import urlRoutes from './routes/urls.js';
 import urlShortener from './routes/urls.js';
 import healthRoutes from './routes/health.js';
 import authRoutes from './routes/auth.js';
@@ -37,7 +37,7 @@ app.use(limiter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Routes
-app.use('/', urlRoutes);
+app.use('/api/url', urlRoutes);
 app.use('/api/url', urlShortener);
 app.use('/api/auth', authRoutes);
 app.use('/api/health', healthRoutes);

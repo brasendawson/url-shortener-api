@@ -59,7 +59,7 @@ CREATE DATABASE urlshortener;
 - `POST /api/url/shorten` - Create short URL
 - `GET /api/url/my-urls` - List user's URLs
 - `GET /api/url/stats/:urlId` - Get URL statistics
-- `GET /:urlId` - Redirect to original URL
+- `GET /api/url/:urlId` - Redirect to original URL
 
 ### Health Check
 - `GET /api/health` - API health status

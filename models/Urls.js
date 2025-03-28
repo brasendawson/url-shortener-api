@@ -1,13 +1,14 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/db.js';
 import User from './User.js';
-import logger from '../utils/logger.js';  // Fixed import path
+import logger from '../utils/logger.js';
 
 const Url = sequelize.define('Url', {
   urlId: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
+    unique: true,
+    primaryKey: true // Explicitly set as primary key
   },
   origUrl: {
     type: DataTypes.TEXT,
@@ -23,7 +24,7 @@ const Url = sequelize.define('Url', {
     allowNull: true
   },
   qrCode: {
-    type: DataTypes.TEXT('long'), 
+    type: DataTypes.TEXT('long'),
     allowNull: true
   },
   clicks: {

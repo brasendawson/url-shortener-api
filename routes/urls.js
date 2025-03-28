@@ -257,18 +257,18 @@ router.get('/stats/:urlId', auth, async (req, res) => {
 
 router.get('/:urlId', async (req, res) => {
   const urlId = req.params.urlId;
-  
+
   try {
-    const url = await Url.findOne({ 
-      where: { urlId },
-      attributes: ['origUrl', 'clicks']
+    // Find the URL by urlId
+    const url = await Url.findOne({
+      where: { urlId }
+      // Removed attributes limitation to ensure primary key is included
     });
-    
+
     if (!url) {
-      // Log not found error before sending response
-      await logger.error('URL redirect failed - Not Found', {
+      await logger.error('URL lookup failed - Not Found', {
         urlId,
-        event: 'url_redirect_failed',
+        event: 'url_lookup_failed',
         reason: 'not_found',
         requestPath: req.originalUrl,
         ip: req.ip,
@@ -283,24 +283,35 @@ router.get('/:urlId', async (req, res) => {
       });
     }
 
-    // Update click count and redirect
-    await url.increment('clicks');
-    return res.redirect(url.origUrl);
+    // Increment clicks using the primary key explicitly
+    await Url.increment('clicks', {
+      where: { urlId }
+    });
+
+    // Return JSON with the original URL
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        origUrl: url.origUrl,
+        clicks: url.clicks + 1 // Reflect the incremented value
+      }
+    });
 
   } catch (error) {
-    // Log any other errors
-    await logger.error('URL redirect failed - Server Error', {
+    await logger.error('URL lookup failed - Server Error', {
       urlId,
-      event: 'url_redirect_failed',
+      event: 'url_lookup_failed',
       error: error.message,
       stack: error.stack,
       requestPath: req.originalUrl,
       timestamp: new Date().toISOString()
     });
 
+    console.error('Error in URL lookup:', error.message, error.stack);
+
     return res.status(500).json({
       status: 'error',
-      message: 'Server error during redirect'
+      message: 'Server Error'
     });
   }
 });
