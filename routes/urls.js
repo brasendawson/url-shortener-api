@@ -238,7 +238,7 @@ router.get('/stats/:urlId', auth, async (req, res) => {
 
 /**
  * @swagger
- * /{urlId}:
+ * /api/url/{urlId}:
  *   get:
  *     summary: Redirect to original URL
  *     tags: [URLs]

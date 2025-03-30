@@ -59,7 +59,7 @@ CREATE DATABASE urlshortener;
 - `POST /api/url/shorten` - Create short URL
 - `GET /api/url/my-urls` - List user's URLs
 - `GET /api/url/stats/:urlId` - Get URL statistics
-- `GET /api/url/:urlId` - Redirect to original URL
+- `GET /api/url/:urlId` - Returns Original url to be redirected
 
 ### Health Check
 - `GET /api/health` - API health status
@@ -102,12 +102,6 @@ Response:
 | qrCode | string | Base64 encoded QR code image |
 | username | string | Owner of the shortened URL |
 | created_at | string | Timestamp of creation |
-
-### Access Short URL
-```http
-GET /:urlId
-```
-Response: `302 Found` - Redirects to original URL
 
 ### Get URL Statistics
 ```http
@@ -410,13 +404,6 @@ npm run test:coverage
 - Input validation
 - JWT token blacklisting
 - Request validation
-
-## CI/CD
-GitHub Actions workflow includes:
-- Automated testing
-- Code coverage reporting
-- Build verification
-- Deployment checks
 
 ## Logging
 - Error logs: ./error.log
