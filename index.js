@@ -39,7 +39,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 // Routes
 // app.use('/', urlRoutes);
 app.use('/api/url', urlShortener);
-app.use('/api/auth', authRoutes)
+app.use('/api/auth', authRoutes);
 app.use('/api/health', healthRoutes);
 
 // Error Handler
