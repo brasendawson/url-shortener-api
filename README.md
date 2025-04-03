@@ -388,15 +388,6 @@ The documentation includes:
 - Example requests
 - Response codes
 
-## Testing
-```bash
-# Run tests
-npm test
-
-# Run tests with coverage
-npm run test:coverage
-```
-
 ## Security Features
 - Rate limiting: 100 requests per 15 minutes
 - Password requirements: Min 8 chars, uppercase, lowercase, number, special char
