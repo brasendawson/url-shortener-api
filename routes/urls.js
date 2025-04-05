@@ -66,8 +66,9 @@ const router = express.Router();
  *         description: Invalid URL
  */
 router.post('/shorten', auth, async (req, res) => {
-  const { origUrl, customSlug } = req.body;
+  const { origUrl, customSlug, frontendBase } = req.body;
   const base = process.env.BASE;
+  const qrBase = frontendBase || base
 
 
   if (!validateUrl(origUrl)) {
@@ -83,7 +84,7 @@ router.post('/shorten', auth, async (req, res) => {
     const urlId = customSlug || nanoid(8);
     const shortUrl = `${base}/${urlId}`;
 
-    const qrCode = await QRCode.toDataURL(shortUrl);
+    const qrCode = await QRCode.toDataURL(qrShortUrl);
 
     const url = await Url.create({
       urlId,
