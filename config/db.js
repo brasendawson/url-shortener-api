@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import mysql2 from 'mysql2';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '.env') });  // Changed path
@@ -14,7 +15,7 @@ export const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'mysql',
-    dialectModule: require('mysql2'),
+    dialectModule: mysql2,
     logging: false,
     sync: { alter: false } // Disable auto-alter
   }
