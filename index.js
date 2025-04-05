@@ -12,14 +12,25 @@ import { specs } from './config/swagger.js';
 import { limiter } from './middleware/rateLimit.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import logger from './utils/logger.js';
-import cors from "cors"
+import cors from "cors";
+import favicon from 'serve-favicon'; // Add this import
+import path from 'path'; // Add this import for path handling
+import { fileURLToPath } from 'url'; // Add this for ES modules
+
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 dotenv.config({ path: './config/.env' });
 
 const app = express();
 app.set('trust proxy', 1);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use (cors())
+app.use(cors());
+
+// Serve favicon
+app.use(favicon(path.join(__dirname, 'favicon.png')));
 
 // Connect to database
 connectDB();
