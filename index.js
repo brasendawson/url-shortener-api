@@ -16,6 +16,7 @@ import cors from "cors"
 dotenv.config({ path: './config/.env' });
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use (cors())
@@ -74,3 +75,5 @@ process.on('unhandledRejection', (err) => {
     });
     process.exit(1);
 });
+
+export default app;
