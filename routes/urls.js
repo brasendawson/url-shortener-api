@@ -67,9 +67,8 @@ const router = express.Router();
  */
 router.post('/shorten', auth, async (req, res) => {
   const { origUrl, customSlug } = req.body;
-  const base = process.env.BASE || 'https://urlshortener-chi-pearl.vercel.app'; // Fallback to Vercel domain
+  const base = process.env.BASE;
 
-  console.log('Base URL:', base); // Debug log to check the value of base
 
   if (!validateUrl(origUrl)) {
     logger.error('Invalid URL submitted', {
@@ -83,8 +82,6 @@ router.post('/shorten', auth, async (req, res) => {
   try {
     const urlId = customSlug || nanoid(8);
     const shortUrl = `${base}/${urlId}`;
-
-    console.log('Generated shortUrl:', shortUrl); // Debug log to check shortUrl
 
     const qrCode = await QRCode.toDataURL(shortUrl);
 
