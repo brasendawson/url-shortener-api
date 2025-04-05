@@ -9,6 +9,7 @@ node_modules/
 logs
 *.log
 npm-debug.log*
+utils/logger.js
 
 # Runtime data
 pids
