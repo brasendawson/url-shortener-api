@@ -43,3 +43,4 @@ build/
 *.swo
 .tmp/
 .vercel
+.env*.local
