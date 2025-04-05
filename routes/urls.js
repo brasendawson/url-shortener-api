@@ -83,7 +83,7 @@ router.post('/shorten', auth, async (req, res) => {
   try {
     const urlId = customSlug || nanoid(8);
     const shortUrl = `${base}/${urlId}`;
-    const qrShortUrl = `${base}/${urlId}`;
+    const qrShortUrl = `${qrBase}/${urlId}`;
 
     const qrCode = await QRCode.toDataURL(qrShortUrl);
 
