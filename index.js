@@ -29,9 +29,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-// Serve favicon
-app.use(favicon(path.join(__dirname, 'favicon.png')));
-
 // Connect to database
 connectDB();
 
