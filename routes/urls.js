@@ -67,7 +67,9 @@ const router = express.Router();
  */
 router.post('/shorten', auth, async (req, res) => {
   const { origUrl, customSlug } = req.body;
-  const base = process.env.BASE;
+  const base = process.env.BASE || 'https://urlshortener-chi-pearl.vercel.app'; // Fallback to Vercel domain
+
+  console.log('Base URL:', base); // Debug log to check the value of base
 
   if (!validateUrl(origUrl)) {
     logger.error('Invalid URL submitted', {
@@ -79,21 +81,20 @@ router.post('/shorten', auth, async (req, res) => {
   }
 
   try {
-    // Use custom slug or generate urlId
     const urlId = customSlug || nanoid(8);
     const shortUrl = `${base}/${urlId}`;
 
-    // Generate QR code
+    console.log('Generated shortUrl:', shortUrl); // Debug log to check shortUrl
+
     const qrCode = await QRCode.toDataURL(shortUrl);
 
-    // Save URL
     const url = await Url.create({
       urlId,
       origUrl,
       shortUrl,
       customSlug,
       qrCode,
-      username: req.user.username, 
+      username: req.user.username,
       date: new Date()
     });
 
@@ -118,12 +119,6 @@ router.post('/shorten', auth, async (req, res) => {
       error: err.message,
       event: 'url_creation_failed'
     });
-    logger.error('Error shortening URL', { 
-      error: err.message,
-      username: req.user.username,
-      origUrl: req.body.origUrl
-    });
-    console.error(err);
     res.status(500).json('Server Error');
   }
 });
