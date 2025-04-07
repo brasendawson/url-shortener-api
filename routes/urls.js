@@ -66,10 +66,9 @@ const router = express.Router();
  *         description: Invalid URL
  */
 router.post('/shorten', auth, async (req, res) => {
-  const { origUrl, customSlug, frontendBase } = req.body;
+  const { origUrl, customSlug: rawCustomSlug, frontendBase } = req.body;
   const base = process.env.BASE;
-  const qrBase = frontendBase || base
-
+  const qrBase = frontendBase || base;
 
   if (!validateUrl(origUrl)) {
     logger.error('Invalid URL submitted', {
@@ -81,6 +80,9 @@ router.post('/shorten', auth, async (req, res) => {
   }
 
   try {
+    // Normalize customSlug: convert empty string to null
+    const customSlug = rawCustomSlug && rawCustomSlug.trim() ? rawCustomSlug.trim() : null;
+    // Set urlId: use customSlug if provided, otherwise generate a random one
     const urlId = customSlug || nanoid(8);
     const shortUrl = `${base}/${urlId}`;
     const qrShortUrl = `${qrBase}/${urlId}`;
@@ -91,7 +93,7 @@ router.post('/shorten', auth, async (req, res) => {
       urlId,
       origUrl,
       shortUrl,
-      customSlug,
+      customSlug, // Will be null if empty
       qrCode,
       username: req.user.username,
       date: new Date()
@@ -106,7 +108,7 @@ router.post('/shorten', auth, async (req, res) => {
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
       logger.error('Duplicate custom slug', {
-        customSlug,
+        customSlug: rawCustomSlug,
         username: req.user.username,
         event: 'duplicate_slug'
       });
