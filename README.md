@@ -124,20 +124,22 @@ Authorization: Bearer your_jwt_token
 Response: Lists all the URLs Shortened by a User
 ```json
 [
-    {
-        "urlId": "abc123",
-        "origUrl": "https://example.com/page1",
-        "shortUrl": "http://localhost:3333/abc123",
-        "clicks": 5,
-        "created_at": "2025-03-23T07:50:27.000Z"
-    },
-    {
-        "urlId": "def456",
-        "origUrl": "https://example.com/page2",
-        "shortUrl": "http://localhost:3333/def456",
-        "clicks": 0,
-        "created_at": "2025-03-23T08:01:15.000Z"
-    }
+  {
+    "urlId": "abc123",
+    "origUrl": "https://example.com/very/long/url/path",
+    "shortUrl": "https://yourdomain.com/abc123",
+    "clicks": 42,
+    "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+    "created_at": "2023-11-15T08:30:15.123Z"
+  },
+  {
+    "urlId": "def456",
+    "origUrl": "https://another-example.com/blog/post",
+    "shortUrl": "https://yourdomain.com/def456",
+    "clicks": 15,
+    "qrCode": "data:image/png;base64,iVBORw0KGg...",
+    "created_at": "2023-11-10T14:22:05.456Z"
+  }
 ]
 ```
 

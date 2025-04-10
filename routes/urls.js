@@ -159,8 +159,8 @@ router.post('/shorten', auth, async (req, res) => {
 router.get('/my-urls', auth, async (req, res) => {
   try {
     const urls = await Url.findAll({
-      where: { username: req.user.username },  // Changed from userId to username
-      attributes: ['origUrl', 'shortUrl', 'clicks', 'qrCode']
+      where: { username: req.user.username },
+      attributes: ['urlId', 'origUrl', 'shortUrl', 'clicks', 'qrCode', 'created_at']
     });
     res.json(urls);
   } catch (err) {
