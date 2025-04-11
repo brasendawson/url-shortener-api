@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import mysql2 from 'mysql2';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.join(__dirname, '.env') });  // Changed path
+dotenv.config({ path: path.join(__dirname, '.env') });  
 
 export const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -17,7 +17,7 @@ export const sequelize = new Sequelize(
     dialect: 'mysql',
     dialectModule: mysql2,
     logging: false,
-    sync: { alter: false } // Disable auto-alter
+    sync: { alter: false } 
   }
 );
 

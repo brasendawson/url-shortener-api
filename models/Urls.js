@@ -8,7 +8,7 @@ const Url = sequelize.define('Url', {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
-    primaryKey: true // Explicitly set as primary key
+    primaryKey: true
   },
   origUrl: {
     type: DataTypes.TEXT,

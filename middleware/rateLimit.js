@@ -2,7 +2,7 @@ import rateLimit from 'express-rate-limit';
 import logger from '../utils/logger.js';
 
 // Constants
-const WINDOW_MS = 15 * 60 * 1000; // 15 minutes in milliseconds
+const WINDOW_MS = 15 * 60 * 1000; 
 const MAX_REQUESTS = 100;
 
 export const limiter = rateLimit({

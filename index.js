@@ -13,11 +13,10 @@ import { limiter } from './middleware/rateLimit.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import logger from './utils/logger.js';
 import cors from "cors";
-import favicon from 'serve-favicon'; // Add this import
-import path from 'path'; // Add this import for path handling
-import { fileURLToPath } from 'url'; // Add this for ES modules
+import favicon from 'serve-favicon'; 
+import path from 'path'; 
+import { fileURLToPath } from 'url';
 
-// Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -25,19 +24,13 @@ dotenv.config({ path: './config/.env' });
 
 const app = express();
 app.set('trust proxy', 1);
+app.use(favicon(path.join(__dirname, 'favicon.ico')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
 // Connect to database
 connectDB();
-
-// Log startup information
-logger.info('Application starting', {
-    event: 'app_start',
-    port: process.env.PORT || 3333,
-    environment: process.env.NODE_ENV || 'development'
-});
 
 // Rate Limiting
 app.use(limiter);
@@ -46,7 +39,6 @@ app.use(limiter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Routes
-// app.use('/', urlRoutes);
 app.use('/api/url', urlShortener);
 app.use('/api/auth', authRoutes);
 app.use('/api/health', healthRoutes);

@@ -4,7 +4,7 @@ import QRCode from 'qrcode';
 import Url from '../models/Urls.js';
 import { validateUrl } from '../utils/utils.js';
 import { auth } from '../middleware/auth.js';
-import logger from '../utils/logger.js';  // Add this import
+import logger from '../utils/logger.js';
 
 const router = express.Router();
 
@@ -93,7 +93,7 @@ router.post('/shorten', auth, async (req, res) => {
       urlId,
       origUrl,
       shortUrl,
-      customSlug, // Will be null if empty
+      customSlug,
       qrCode,
       username: req.user.username,
       date: new Date()
@@ -258,7 +258,6 @@ router.get('/:urlId', async (req, res) => {
     // Find the URL by urlId
     const url = await Url.findOne({
       where: { urlId }
-      // Removed attributes limitation to ensure primary key is included
     });
 
     if (!url) {
@@ -289,7 +288,7 @@ router.get('/:urlId', async (req, res) => {
       status: 'success',
       data: {
         origUrl: url.origUrl,
-        clicks: url.clicks + 1 // Reflect the incremented value
+        clicks: url.clicks + 1
       }
     });
 
