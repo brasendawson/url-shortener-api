@@ -16,6 +16,9 @@ import cors from "cors";
 import favicon from 'serve-favicon'; 
 import path from 'path'; 
 import { fileURLToPath } from 'url';
+import { injectSpeedInsights } from '@vercel/speed-insights';
+
+injectSpeedInsights();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
